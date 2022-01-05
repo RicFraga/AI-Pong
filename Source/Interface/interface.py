@@ -1,4 +1,5 @@
 import pygame
+import numpy as np
 
 WIDTH = 1200
 HEIGHT = 600
@@ -9,7 +10,8 @@ borderColor = pygame.Color((179, 179, 179))
 ballColor = pygame.Color((12, 69, 200))
 palColor = pygame.Color((128, 90, 73))
 
-ballSpeed = 0.15
+ballSpeedx = 0.2
+ballSpeedy = 0.25
 
 class Ball:
     
@@ -31,6 +33,13 @@ class Ball:
     def update(self):
         global fgColor, ballColor
         self.show(fgColor)
+
+        if(self.y + self.vy + self.RADIUS >= HEIGHT - BORDER or self.y + self.vy - self.RADIUS <= BORDER):
+            self.vy = -self.vy
+
+        if(self.x + self.vx  + self.RADIUS >= WIDTH - BORDER or self.x + self.vx  - self.RADIUS <= BORDER):
+            self.vx = -self.vx
+
         self.x += self.vx
         self.y += self.vy
         self.show(ballColor)
@@ -50,7 +59,15 @@ class Paddle:
         colour,
         pygame.Rect((self.x, self.y), (self.PWIDTH, self.PHEIGHT)))
 
-ballplay = Ball(WIDTH // 2, HEIGHT // 2, -ballSpeed, 0)
+auxballSpeedx = ballSpeedx
+if(np.random.randint(2) == 0):
+    auxballSpeedx = -ballSpeedx
+
+auxballSpeedy = ballSpeedy
+if(np.random.randint(2) == 0):
+    auxballSpeedy = -ballSpeedy
+
+ballplay = Ball(WIDTH // 2, HEIGHT // 2, auxballSpeedx, auxballSpeedy)
 player1 = Paddle(BORDER, 240)
 player2 = Paddle(WIDTH - BORDER - Paddle.PWIDTH, 240)
 
