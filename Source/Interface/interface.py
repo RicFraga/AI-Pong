@@ -13,6 +13,8 @@ palColor = pygame.Color((128, 90, 73))
 ballSpeedx = 0.2
 ballSpeedy = 0.25
 
+playerSpeed = 0.0001
+
 class Ball:
     
     RADIUS = 10
@@ -57,7 +59,21 @@ class Paddle:
         global palColor
         pygame.draw.rect(screen,
         colour,
-        pygame.Rect((self.x, self.y), (self.PWIDTH, self.PHEIGHT)))
+        pygame.Rect((self.x, self.y), (self.PWIDTH, self.PHEIGHT)))\
+    
+    def update(self):
+        global fgColor, palColor
+        self.show(fgColor)
+
+        if(pygame.mouse.get_pos()[1] <= BORDER):
+            self.y = BORDER
+        
+        elif(pygame.mouse.get_pos()[1] >= HEIGHT - BORDER - Paddle.PHEIGHT):
+            self.y = HEIGHT - BORDER - Paddle.PHEIGHT
+
+        else:
+            self.y = pygame.mouse.get_pos()[1]
+        self.show(palColor)
 
 auxballSpeedx = ballSpeedx
 if(np.random.randint(2) == 0):
@@ -102,5 +118,8 @@ while(True):
 
     ballplay.update()
     pygame.display.flip()
+    keys = pygame.key.get_pressed()
+    
+    player1.update()
 
 pygame.quit()
